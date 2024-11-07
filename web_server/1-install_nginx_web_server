@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# Install nginx web server
+# SetUp Process for Nginx on a server
 
-sudo apt-get update -y
-sudo apt-get install -y nginx
-sudo echo "Holberton School" > /var/www/html/index.html
-sudo service nginx restart
+apt-get -y update
+apt-get -y install nginx
+ufw enable
+ufw allow 'Nginx HTTP'
+ufw allow 'OpenSSH'
+echo "Holberton School" > /var/www/html/index.html
+service nginx restart
