@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Update package lists to ensure latest information
+sudo apt-get update -y
+
+# Install nginx with automatic "yes" confirmation
+sudo apt-get install -y nginx
+sudo ufw allow 'Nginx HTTP'
+
+# Configure Nginx to display "Holberton School" on the home page
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
+
+sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://https://www.youtube.com/watch?v=DFTSK6CnECk permanent;' /etc/nginx/sites-available/default
+
+# Restart Nginx without using systemctl (use the service command instead)
+sudo service nginx restart
