@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Script to install and configure Nginx with custom headers and settings
+
+# Update the package lists and install Nginx
+sudo apt-get update -y
+sudo apt-get install -y nginx
+sudo ufw allow 'Nginx HTTP'
+
+# Configure Nginx to display "Holberton School" on the home page
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
+
+# Add a rewrite rule for redirection
+sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=DFTSK6CnECk permanent;' /etc/nginx/sites-available/default
+
+# Add a custom error page
+sed -i '/listen 80 default_server/a error_page 404 /404.html;' /etc/nginx/sites-available/default
+
+# Configure Nginx to display "Ceci n'est pas une page" on the error page
+sudo touch /var/www/html/404.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+# Add custom HTTP header X-Served-By to the server block
+sudo sed -i '/listen 80 default_server/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply the changes
+sudo systemctl restart nginx
