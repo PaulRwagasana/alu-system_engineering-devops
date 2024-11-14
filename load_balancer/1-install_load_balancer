@@ -16,4 +16,4 @@ backend app
     server 6362-web-01 54.224.252.175:80 check
     server 6362-web-02 54.175.30.67 check" >> /etc/haproxy/haproxy.cfg
 
-sudo service haproxy restart
+sudo service haproxy restart .
