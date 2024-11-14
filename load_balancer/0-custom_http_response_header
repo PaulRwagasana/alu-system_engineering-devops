@@ -1,26 +1,43 @@
 #!/usr/bin/env bash
-# Script to install and configure Nginx with custom headers and settings
+# Installs Nginx with the following configurations:
+# - Listens on port 80.
+# - Returns a page containing "Holberton School" when queried at the root with a curl GET request.
+# - Configures /redirect_me as a "301 Moved Permanently".
+# - Includes a custom 404 page containing "Ceci n'est pas une page".
 
-# Update the package lists and install Nginx
-sudo apt-get update -y
-sudo apt-get install -y nginx
-sudo ufw allow 'Nginx HTTP'
+# Update package list and install Nginx
+apt-get update
+apt-get install -y nginx
 
-# Configure Nginx to display "Holberton School" on the home page
-echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
+# Create necessary directories and files for Nginx
+mkdir -p /etc/nginx/html
+touch /etc/nginx/html/index.html
+echo "Hello World!" > /etc/nginx/html/index.html
 
-# Add a rewrite rule for redirection
-sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=DFTSK6CnECk permanent;' /etc/nginx/sites-available/default
+touch /etc/nginx/html/404.html
+echo "Ceci n'est pas une page" > /etc/nginx/html/404.html
 
-# Add a custom error page
-sed -i '/listen 80 default_server/a error_page 404 /404.html;' /etc/nginx/sites-available/default
+# Configure Nginx
+cat <<EOL > /etc/nginx/sites-available/default
+server {
+    listen 80;
+    listen [::]:80 default_server;
+    add_header X-Served-By \$HOSTNAME;
 
-# Configure Nginx to display "Ceci n'est pas une page" on the error page
-sudo touch /var/www/html/404.html
-echo "Ceci n'est pas une page" > /var/www/html/404.html
+    root /etc/nginx/html;
+    index index.html index.htm;
 
-# Add custom HTTP header X-Served-By to the server block
-sudo sed -i '/listen 80 default_server/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+    location /redirect_me {
+        return 301 http://cuberule.com/;
+    }
+
+    error_page 404 /404.html;
+    location /404 {
+        root /etc/nginx/html;
+        internal;
+    }
+}
+EOL
 
 # Restart Nginx to apply the changes
-sudo systemctl restart nginx
+service nginx restart
