@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 #adv task
 sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-sudo service nginx restart
+sudo service nginx enable
 kill "$(pgrep 'nginx' | head -1)"
