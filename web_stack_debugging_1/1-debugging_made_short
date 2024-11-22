@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#adv task
-sed -i 's/listen 8080;/listen 80;/' /etc/nginx/sites-enabled/default
-rm -f /run/nginx.pid
+# adv task
+sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+sudo pkill -9 nginx
 sudo service nginx restart
