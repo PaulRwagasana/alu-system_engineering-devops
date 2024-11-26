@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #Run Nginx as Nginx
-sudo sed -i 's/user www-data/user nginx' /etc/nginx/nginx.config
-sudo sed -i 's/80/8080/g' /etc/nginx/sites-available/default
-sudo chmod 644 /etc/nginx/nginx.config
-pkill apache2
-sudo -u nginx service nginx restart
+sudo chmod -R 755 /etc/nginx/
+sudo pkill -9 apache2
+sudo sed -i 's/8080/8081/g' /etc/apache2/ports.conf
+sudo service apache2 restart
+su nginx -c "sed -i 's/80/8080/g' /etc/nginx/sites-enabled/default"
+su nginx service nginx restart
