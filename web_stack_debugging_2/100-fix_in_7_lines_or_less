@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# A BASH Script that runs nignx webserver as nginx and also configures nginx to
+# Configure the container to run Nginx as the nginx user.
+sudo chmod -R 755 /etc/nginx/
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
 pkill apache2
-sed -i 's/80/8080/g' /etc/nginx/sites-available/www.tawe.tech
-chmod 644 /etc/nginx/nginx.conf
-sudo -u nginx service nginx restart
+su nginx -c "service nginx restart"
