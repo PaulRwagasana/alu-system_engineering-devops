@@ -5,4 +5,3 @@ sudo sed -i 's/8080/8081/g' /etc/apache2/ports.conf
 sudo service apache2 restart
 sudo sed -i 's/80/8080/g' /etc/nginx/sites-enabled/default
 sudo service nginx restart
-
